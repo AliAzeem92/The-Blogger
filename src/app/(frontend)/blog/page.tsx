@@ -4,6 +4,28 @@ import { PostCard } from '@/components/PostCard'
 
 import type { Post } from '@/payload-types'
 
+export const dynamic = 'force-dynamic'
+
+type FeaturedImage = {
+  url: string
+  alt?: string | null
+}
+
+const toFeaturedImage = (image: unknown): FeaturedImage | null => {
+  if (
+    image &&
+    typeof image === 'object' &&
+    'url' in image &&
+    typeof (image as { url?: unknown }).url === 'string'
+  ) {
+    return {
+      url: (image as { url: string }).url,
+      alt: (image as { alt?: string | null }).alt,
+    }
+  }
+  return null
+}
+
 export default async function BlogPage() {
   const payload = await getPayload({ config })
 
@@ -29,17 +51,7 @@ export default async function BlogPage() {
             title={post.title as string}
             excerpt={post.excerpt as string | null | undefined}
             author={post.author as Post['author']}
-            featuredImage={
-              typeof post.featuredImage === 'object' && post.featuredImage !== null
-                ? ({
-                    url: (post.featuredImage as any).url,
-                    alt: (post.featuredImage as any).alt,
-                  } as {
-                    url: string
-                    alt?: string | null
-                  })
-                : null
-            }
+            featuredImage={toFeaturedImage(post.featuredImage)}
             publishedAt={post.publishedAt as Post['publishedAt']}
           />
         ))}

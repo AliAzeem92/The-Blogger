@@ -19,7 +19,7 @@ export default function Navbar() {
           <Link href="/blog" className="hover:text-gray-700 text-white text-xl">
             Blog
           </Link>
-          <Link href="/admin" className="hover:text-gray-700 text-white text-xl">
+          <Link href="/admin" target="_blank" className="hover:text-gray-700 text-white text-xl">
             Admin
           </Link>
         </div>

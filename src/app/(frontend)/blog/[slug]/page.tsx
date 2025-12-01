@@ -3,6 +3,8 @@ import config from '@payload-config'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 
+export const dynamic = 'force-dynamic'
+
 type BlogPostPageParams = {
   slug?: string | string[]
 }
