@@ -5,32 +5,22 @@ export async function GET() {
   try {
     const payload = await getPayload({ config })
     
-    const media = await payload.find({
+    // Direct database update
+    const result = await payload.db.updateMany({
       collection: 'media',
       where: {
-        cloudinaryUrl: { exists: true }
+        cloudinaryUrl: { $exists: true, $ne: null }
+      },
+      data: {
+        $set: {
+          url: { $getField: 'cloudinaryUrl' }
+        }
       }
     })
     
-    let updated = 0
-    
-    for (const doc of media.docs) {
-      if (doc.cloudinaryUrl) {
-        await payload.update({
-          collection: 'media',
-          id: doc.id,
-          data: {
-            url: doc.cloudinaryUrl
-          },
-          overrideAccess: true
-        })
-        updated++
-      }
-    }
-    
     return Response.json({ 
-      message: `Updated ${updated} media records`,
-      total: media.docs.length 
+      message: `Updated ${result.modifiedCount} media records`,
+      matched: result.matchedCount
     })
   } catch (error) {
     return Response.json({ error: String(error) }, { status: 500 })
