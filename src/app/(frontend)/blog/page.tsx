@@ -12,15 +12,11 @@ type FeaturedImage = {
 }
 
 const toFeaturedImage = (image: unknown): FeaturedImage | null => {
-  if (
-    image &&
-    typeof image === 'object' &&
-    'url' in image &&
-    typeof (image as { url?: unknown }).url === 'string'
-  ) {
-    return {
-      url: (image as { url: string }).url,
-      alt: (image as { alt?: string | null }).alt,
+  if (image && typeof image === 'object') {
+    const img = image as { cloudinaryUrl?: string; url?: string; alt?: string | null }
+    const url = img.cloudinaryUrl || img.url
+    if (url) {
+      return { url, alt: img.alt }
     }
   }
   return null

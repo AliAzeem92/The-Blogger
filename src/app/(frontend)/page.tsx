@@ -50,7 +50,7 @@ export default async function HomePage() {
                 featuredImage={
                   typeof post.featuredImage === 'object' && post.featuredImage !== null
                     ? ({
-                        url: (post.featuredImage as unknown as { url: string }).url,
+                        url: (post.featuredImage as unknown as { cloudinaryUrl?: string; url: string }).cloudinaryUrl || (post.featuredImage as unknown as { url: string }).url,
                         alt: (post.featuredImage as unknown as { alt?: string | null }).alt,
                       } as {
                         url: string
