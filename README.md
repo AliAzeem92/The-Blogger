@@ -17,12 +17,40 @@ After you click the `Deploy` button above, you'll want to have standalone copy o
 ### Development
 
 1. First [clone the repo](#clone) if you have not done so already
-2. `cd my-project && cp .env.example .env` to copy the example environment variables. You'll need to add the `MONGODB_URI` from your Cloud project to your `.env` if you want to use S3 storage and the MongoDB database that was created for you.
+2. Create a `.env` file in the root directory with the following environment variables:
+   ```env
+   PAYLOAD_SECRET=your-payload-secret-here
+   DATABASE_URI=your-mongodb-connection-string-here
+   
+   # Cloudinary Configuration (Required for image uploads)
+   CLOUDINARY_CLOUD_NAME=your-cloudinary-cloud-name
+   CLOUDINARY_API_KEY=your-cloudinary-api-key
+   CLOUDINARY_API_SECRET=your-cloudinary-api-secret
+   CLOUDINARY_FOLDER=payload-media
+   ```
 
 3. `pnpm install && pnpm dev` to install dependencies and start the dev server
 4. open `http://localhost:3000` to open the app in your browser
 
 That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
+
+### Cloudinary Setup
+
+This project uses Cloudinary for image storage and management. To set up Cloudinary:
+
+1. Create a free account at [cloudinary.com](https://cloudinary.com)
+2. Get your credentials from the Cloudinary Dashboard:
+   - Cloud Name
+   - API Key
+   - API Secret
+3. Add these credentials to your `.env` file (see above)
+4. The `CLOUDINARY_FOLDER` environment variable is optional and defaults to `payload-media` - this sets the folder where images are stored in Cloudinary
+
+**How it works:**
+- When you upload an image through the Payload CMS admin panel, it's automatically uploaded to Cloudinary
+- The image URL stored in the database points to Cloudinary's CDN
+- Local files are automatically deleted after successful Cloudinary upload
+- When you delete a media item, it's also removed from Cloudinary
 
 #### Docker (Optional)
 
@@ -50,7 +78,7 @@ See the [Collections](https://payloadcms.com/docs/configuration/collections) doc
 
 - #### Media
 
-  This is the uploads enabled collection. It features pre-configured sizes, focal point and manual resizing to help you manage your pictures.
+  This is the uploads enabled collection configured with Cloudinary integration. Images are automatically uploaded to Cloudinary's CDN for optimal performance. The collection stores Cloudinary URLs and metadata, and handles automatic cleanup when media is deleted.
 
 ### Docker
 

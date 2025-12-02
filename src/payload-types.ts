@@ -156,6 +156,11 @@ export interface User {
 export interface Media {
   id: string;
   alt: string;
+  cloudinaryPublicId?: string | null;
+  /**
+   * This field is automatically filled after the image is uploaded to Cloudinary. This is the CDN URL where your image is hosted.
+   */
+  cloudinaryUrl?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -344,6 +349,8 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  cloudinaryPublicId?: T;
+  cloudinaryUrl?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
