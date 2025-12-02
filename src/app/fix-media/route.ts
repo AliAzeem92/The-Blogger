@@ -15,13 +15,14 @@ export async function GET() {
     let updated = 0
     
     for (const doc of media.docs) {
-      if (doc.cloudinaryUrl && doc.url !== doc.cloudinaryUrl) {
+      if (doc.cloudinaryUrl) {
         await payload.update({
           collection: 'media',
           id: doc.id,
           data: {
             url: doc.cloudinaryUrl
-          }
+          },
+          overrideAccess: true
         })
         updated++
       }
